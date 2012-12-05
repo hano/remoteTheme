@@ -1,0 +1,7 @@
+-  go to http://pastebin.com/
+-  write vaild css
+-  save
+-  look at the url e.q. http://pastebin.com/QME6LZdX
+-  copy the param behind the last / e.q. QME6LZdX
+-  paste it to the app textfield
+-  have fun
