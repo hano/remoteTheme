@@ -6,6 +6,9 @@ remoteTheme.ApplicationController = M.Controller.extend({
 
     init: function( isFirstLoad ){
         this.loadRemoteTheme();
+        //ZtaFw6es blue
+        //WAzGskWw green
+        //QME6LZdX red
         this.set('themeList', [{name: 'WAzGskWw'}, {name: 'QME6LZdX'}]);
     },
 
@@ -28,6 +31,7 @@ remoteTheme.ApplicationController = M.Controller.extend({
             onSuccess:function (data, msg, xhr) {
                 M.LoaderView.hide();
                 var style = that.createStyle(data);
+                that.removeStyle();
                 that.appendStyle( style );
             },
             onError:function (xhr, msg, error) {
@@ -41,6 +45,7 @@ remoteTheme.ApplicationController = M.Controller.extend({
 
         var css = data || 'h1 { background: red; }';
         var style = document.createElement('style');
+        style.id = 'remote_theme';
 
         style.type = 'text/css';
         if(style.styleSheet){
@@ -55,6 +60,13 @@ remoteTheme.ApplicationController = M.Controller.extend({
     appendStyle: function( style ){
         var head = document.getElementsByTagName('head')[0];
         head.appendChild(style);
+    },
+
+    removeStyle: function( id ){
+        var styleToRemove = document.getElementById(id || 'remote_theme');
+        if(styleToRemove && styleToRemove.remove){
+            styleToRemove.remove();
+        }
     },
 
     changeTheme: function(id){
