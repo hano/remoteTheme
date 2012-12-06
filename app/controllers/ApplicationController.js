@@ -18,27 +18,50 @@ remoteTheme.ApplicationController = M.Controller.extend({
         var ts = themeShortcut ? themeShortcut : 'WAzGskWw';
         var url = that.cssFilename + ts;
 
-        M.Request.init({
-            url: url,
-            //method:obj.method,
-            //isJSON:YES,
-            //timeout:obj.timeout ? obj.timeout : null,
-            //data:obj.data ? obj.data : null,
-            //contentType:"application/json; charset=utf-8",
-            beforeSend:function () {
-                    M.LoaderView.show();
-            },
-            onSuccess:function (data, msg, xhr) {
-                M.LoaderView.hide();
-                var style = that.createStyle(data);
-                that.removeStyle();
-                that.appendStyle( style );
-            },
-            onError:function (xhr, msg, error) {
-                M.LoaderView.hide();
-            }
-        }).send();
+        var style = that.getFromLocaleStorage(ts);
 
+        var onSuccess = function(data, msg, xhr){
+            var style = that.createStyle(data);
+            S = style;
+            that.removeStyle();
+            that.appendStyle( style );
+            that.saveToLocaleStorage(ts, data);
+        }
+
+        if( style ){
+            onSuccess( style );
+        } else {
+
+            M.Request.init({
+                url: url,
+                beforeSend:function () {
+                    M.LoaderView.show();
+                },
+                onSuccess:function (data, msg, xhr) {
+                    M.LoaderView.hide();
+                    onSuccess(data, msg, xhr);
+                },
+                onError:function (xhr, msg, error) {
+                    M.LoaderView.hide();
+                }
+            }).send();
+        }
+
+    },
+
+    buildStorageKey: function( key ) {
+        return M.LOCAL_STORAGE_PREFIX + M.Application.name + M.LOCAL_STORAGE_SUFFIX + key;
+    },
+
+    saveToLocaleStorage: function(key, value){
+        var k = this.buildStorageKey(key);
+        localStorage.setItem(k, value);
+    },
+
+    getFromLocaleStorage: function( key ){
+
+        var k = this.buildStorageKey( key );
+        return localStorage.getItem( k );
     },
 
     createStyle: function( data ){
