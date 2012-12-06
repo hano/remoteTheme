@@ -87,8 +87,8 @@ remoteTheme.ApplicationController = M.Controller.extend({
 
     removeStyle: function( id ){
         var styleToRemove = document.getElementById(id || 'remote_theme');
-        if(styleToRemove && styleToRemove.remove){
-            styleToRemove.remove();
+        if(styleToRemove){
+            $(styleToRemove).remove();
         }
     },
 
